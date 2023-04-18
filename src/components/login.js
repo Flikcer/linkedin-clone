@@ -20,7 +20,7 @@ function Login(props) {
           <img src="images/login-hero.svg" alt="login"></img>
         </Hero>
         <Form>
-          <Google onClick={() => props.SignIn}>
+          <Google onClick={() => props.signIn()}>
             <img src="images/google.svg" alt="google"></img>
             Sign in With Google
           </Google>
@@ -170,6 +170,8 @@ const mapStatetoProps = (state) => {
   return {};
 };
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  signIn: () => dispatch(signInAPI()),
+});
 
 export default connect(mapStatetoProps, mapDispatchToProps)(Login);
