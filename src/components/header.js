@@ -59,7 +59,7 @@ const Header = (props) => {
             <User>
               <a href>
                 {props.user && props.user.photoURL ? (
-                  <img src={props.user.photoURL} />
+                  <img src={props.user.photoURL} alt="user" />
                 ) : (
                   <img src="images/user.svg" alt="user" className="padMe"></img>
                 )}
