@@ -1,11 +1,36 @@
 import styled from "styled-components";
 import { useState } from "react";
+import ReactPlayer from "react-player";
+import { connect } from "react-redux";
 
 const PostModal = (props) => {
   const [editorText, setEditorText] = useState("");
+  const [shareImage, setShareImage] = useState(null);
+  const [videoLink, setVideoLink] = useState("");
+  const [assetArea, setAssetArea] = useState("");
+
+  const handleChange = (e) => {
+    const image = e.target.files[0];
+
+    if (image === "" || image === undefined) {
+      alert(`File entered is a ${typeof image}. File must be an image.`);
+      return;
+    }
+
+    setShareImage(image);
+  };
+
+  const switchAssetArea = (area) => {
+    setShareImage(null);
+    setVideoLink("");
+    setAssetArea(area);
+  };
 
   const reset = (e) => {
     setEditorText("");
+    setShareImage(null);
+    setVideoLink("");
+    setAssetArea("");
     props.handleClick(e);
   };
 
@@ -22,8 +47,12 @@ const PostModal = (props) => {
             </Header>
             <SharedContent>
               <UserInfo>
-                <img src="/images/user.svg" alt="user" />
-                <span>Name</span>
+                {props.user.photoURL ? (
+                  <img src={props.user.photoURL} />
+                ) : (
+                  <img src="/images/user.svg" alt="user" />
+                )}
+                <span>{props.user.displayName}</span>
               </UserInfo>
               <Editor>
                 <textarea
@@ -31,16 +60,47 @@ const PostModal = (props) => {
                   onChange={(e) => setEditorText(e.target.value)}
                   placeholder="Enter Post Text..."
                   autoFocus={true}
-                ></textarea>
+                />
+                {assetArea === "image" ? (
+                  <UploadImage>
+                    <input
+                      type="file"
+                      accept="image/gif, image/jpeg, image/png, image/jpg"
+                      name="image"
+                      id="file"
+                      style={{ display: "none" }}
+                      onChange={handleChange}
+                    />
+                    <p>
+                      <label htmlFor="file">Select an Image to Share</label>
+                    </p>
+                    {shareImage && (
+                      <img src={URL.createObjectURL(shareImage)}></img>
+                    )}
+                  </UploadImage>
+                ) : (
+                  assetArea === "media" && (
+                    <>
+                      <input
+                        type="text"
+                        placeholder="Please enter video link here"
+                        value={videoLink}
+                        onChange={(e) => setVideoLink(e.target.value)}
+                      ></input>
+                      {videoLink && (
+                        <ReactPlayer width={"100%"} url={videoLink} />
+                      )}
+                    </>
+                  )
+                )}
               </Editor>
-              {/* <Editor></Editor> */}
             </SharedContent>
             <ShareCreation>
               <AttachAssets>
-                <AssetButton>
+                <AssetButton onClick={() => switchAssetArea("image")}>
                   <img src="/images/photo-i.svg" alt="photo" />
                 </AssetButton>
-                <AssetButton>
+                <AssetButton onClick={() => switchAssetArea("media")}>
                   <img src="/images/video-icon.svg" alt="video" />
                 </AssetButton>
               </AttachAssets>
@@ -50,7 +110,9 @@ const PostModal = (props) => {
                   Anyone
                 </AssetButton>
               </ShareComment>
-              <PostButton>Post</PostButton>
+              <PostButton disabled={!editorText ? true : false}>
+                Post
+              </PostButton>
             </ShareCreation>
           </Content>
         </Container>
@@ -182,11 +244,13 @@ const PostButton = styled.button`
   border-radius: 20px;
   padding-left: 16px;
   padding-right: 16px;
-  background-color: #0a66c2;
-  color: #fff;
+  background-color: ${(props) =>
+    props.disabled ? "rgba(0,0,0,0.8)" : "#0a66c2"};
+  color: ${(props) => (props.disabled ? "rgba(1,1,1,0.2)" : "#fff")};
 
   &:hover {
-    background-color: #004182;
+    background-color: ${(props) =>
+      props.disabled ? "rgba(0,0,0,0.08)" : "#004182"};
   }
 `;
 
@@ -206,4 +270,19 @@ const Editor = styled.div`
   }
 `;
 
-export default PostModal;
+const UploadImage = styled.div`
+  text-align: center;
+  img {
+    width: 100%;
+  }
+`;
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.userState.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostModal);
