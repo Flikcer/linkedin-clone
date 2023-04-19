@@ -6,6 +6,7 @@ import Login from "./components/login";
 import Header from "./components/header";
 import Home from "./components/home";
 import { getUserAuth } from "./actions";
+import login from "./components/login";
 
 function App(props) {
   useEffect(() => {
