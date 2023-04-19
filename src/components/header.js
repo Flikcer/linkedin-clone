@@ -22,42 +22,42 @@ const Header = (props) => {
         <Nav>
           <NavListWrap>
             <NavList className="active">
-              <a href>
+              <a>
                 <img src="images/nav-home.svg" alt="home"></img>
                 <span>Home</span>
               </a>
             </NavList>
 
             <NavList>
-              <a href>
+              <a>
                 <img src="images/nav-network.svg" alt="network"></img>
                 <span>My Network</span>
               </a>
             </NavList>
 
             <NavList>
-              <a href>
+              <a>
                 <img src="images/nav-jobs.svg" alt="jobs"></img>
                 <span>Jobs</span>
               </a>
             </NavList>
 
             <NavList>
-              <a href>
+              <a>
                 <img src="images/nav-messaging.svg" alt="messaging"></img>
                 <span>Messaging</span>
               </a>
             </NavList>
 
             <NavList>
-              <a href>
+              <a>
                 <img src="images/nav-notifications.svg" alt="notif"></img>
                 <span>Notifications</span>
               </a>
             </NavList>
 
             <User>
-              <a href>
+              <a>
                 {props.user && props.user.photoURL ? (
                   <img src={props.user.photoURL} alt="user" />
                 ) : (
@@ -71,7 +71,7 @@ const Header = (props) => {
               </SignOut>
             </User>
             <Work>
-              <a href>
+              <a>
                 <img
                   src="images/nav-work.svg"
                   alt="work"
